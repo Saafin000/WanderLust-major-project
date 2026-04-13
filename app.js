@@ -54,7 +54,11 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
+const MONGO_URL = process.env.ATLASDB_URL || "mongodb://127.0.0.1:27017/wanderlust";
+
+mongoose.connection.on("error", (err) => {
+    console.error("MongoDB connection error:", err.message);
+});
 
 main().then(() => {
     console.log("connected to DB");
